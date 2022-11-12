@@ -1,6 +1,6 @@
 import Planes.experimentalPlane;
 import models.MilitaryType;
-import Planes.MilitaryPlane;
+import Planes.militaryPlane;
 import Planes.PassengerPlane;
 import Planes.Plane;
 
@@ -11,64 +11,65 @@ import java.util.*;
 // 4-Jan-2019
 
 public class Airport {
-    private List<? extends Plane> planes;
+    private final List<? extends Plane> planes;
 
-
-
-    public List<PassengerPlane> getPasPl() {
-        List<? extends Plane> l = this.planes;
-        List<PassengerPlane> x = new ArrayList<>();
-        for (Plane p : l) {if (p instanceof PassengerPlane) {x.add((PassengerPlane) p);}}
-        return x;
+    //Constructor
+    public Airport(List<? extends Plane> planes) {
+        this.planes = planes;
     }
 
-    public List<MilitaryPlane> getMilitaryPlanes() {
-        List<MilitaryPlane> militaryPlanes = new ArrayList<>();
-        for (Plane plane : planes) {
-            if (plane instanceof MilitaryPlane) {
-                militaryPlanes.add((MilitaryPlane) plane);
-            } //if
-            else {
+    public List<? extends Plane> getPlanes() {
+        return planes;
+    }
 
-            } // else
-        } //for
+
+
+    public List<PassengerPlane> getPassengerPlanes() {
+        List<PassengerPlane> passengerPlaneList = new ArrayList<>();
+        for (Plane plane : this.planes) {
+            if (plane instanceof PassengerPlane) {
+                passengerPlaneList.add((PassengerPlane) plane);
+            }
+        }
+        return passengerPlaneList;
+    }
+
+    public List<militaryPlane> getMilitaryPlanes() {
+        List<militaryPlane> militaryPlanes = new ArrayList<>();
+        for (Plane plane : planes) {
+            if (plane instanceof militaryPlane) {
+                militaryPlanes.add((militaryPlane) plane);
+            } 
+        } 
         return militaryPlanes;
     }
 
     public PassengerPlane getPassengerPlaneWithMaxPassengersCapacity() {
-        List<PassengerPlane> passengerPlanes = getPasPl();
+       List<PassengerPlane> passengerPlanes = getPassengerPlanes();
         PassengerPlane planeWithMaxCapacity = passengerPlanes.get(0);
-        for (int i = 0; i < passengerPlanes.size(); i++) {
-            if (passengerPlanes.get(i).getPassengersCapacity() > planeWithMaxCapacity.getPassengersCapacity()) {
-                planeWithMaxCapacity = passengerPlanes.get(i);
+        for (PassengerPlane passengerPlane : passengerPlanes) {
+            if (passengerPlane.getPassengersCapacity() > planeWithMaxCapacity.getPassengersCapacity()) {
+                planeWithMaxCapacity = passengerPlane;
             }
         }
-
-
-
-
-
-
         return planeWithMaxCapacity;
     }
 
-    public List<MilitaryPlane> getTransportMilitaryPlanes() {
-    List<MilitaryPlane> transportMilitaryPlanes = new ArrayList<>();
-    List<MilitaryPlane> militaryPlanes = getMilitaryPlanes();
-    for (int i = 0; i < militaryPlanes.size(); i++) {
-    MilitaryPlane plane = militaryPlanes.get(i);
-    if (plane.getType() == MilitaryType.TRANSPORT) {
-    transportMilitaryPlanes.add(plane);
-    }
-    }
-    return transportMilitaryPlanes;
+    public List<militaryPlane> getTransportMilitaryPlanes() {
+        List<militaryPlane> transportMilitaryPlanes = new ArrayList<>();
+        List<militaryPlane> militaryPlanes = getMilitaryPlanes();
+        for (militaryPlane plane : militaryPlanes) {
+            if (plane.getType() == MilitaryType.TRANSPORT) {
+                transportMilitaryPlanes.add(plane);
+            }
+        }
+        return transportMilitaryPlanes;
     }
 
-    public List<MilitaryPlane> getBomberMilitaryPlanes() {
-        List<MilitaryPlane> bomberMilitaryPlanes = new ArrayList<>();
-        List<MilitaryPlane> militaryPlanes = getMilitaryPlanes();
-        for (int i = 0; i < militaryPlanes.size(); i++) {
-            MilitaryPlane plane = militaryPlanes.get(i);
+    public List<militaryPlane> getBomberMilitaryPlanes() {
+        List<militaryPlane> bomberMilitaryPlanes = new ArrayList<>();
+        List<militaryPlane> militaryPlanes = getMilitaryPlanes();
+        for (militaryPlane plane : militaryPlanes) {
             if (plane.getType() == MilitaryType.BOMBER) {
                 bomberMilitaryPlanes.add(plane);
             }
@@ -88,7 +89,7 @@ public class Airport {
     }
 
     public Airport sortByMaxDistance() {
-        Collections.sort(planes, new Comparator<Plane>() {
+         planes.sort(new Comparator<Plane>() {
             public int compare(Plane o1, Plane o2) {
                 return o1.Get_Max_Flight_Distance() - o2.Get_Max_Flight_Distance();
             }
@@ -97,21 +98,17 @@ public class Airport {
     }
 
 
-    /**
-     * Sorts by max speed
-     * @return Airport
-     */
     public Airport sortByMaxSpeed() {
-        Collections.sort(planes, new Comparator<Plane>() {
+    	planes.sort(new Comparator<Plane>() {
             public int compare(Plane o1, Plane o2) {
-                return o1.getMS() - o2.getMS();
+                return o1.getMaxSpeed() - o2.getMaxSpeed();
             }
         });
         return this;
     }
 
     public Airport sortByMaxLoadCapacity() {
-        Collections.sort(planes, new Comparator<Plane>() {
+        planes.sort(new Comparator<Plane>() {
             public int compare(Plane o1, Plane o2) {
                 return o1.getMinLoadCapacity() - o2.getMinLoadCapacity();
             }
@@ -119,28 +116,8 @@ public class Airport {
         return this;
     }
 
-    public List<? extends Plane> getPlanes() {
-        return planes;
-    }
-
-    private void print(Collection<? extends Plane> collection) {
-        Iterator<? extends Plane> iterator = collection.iterator();
-        while (iterator.hasNext()) {
-            Plane plane = iterator.next();
-            System.out.println(plane);
-        }
-    }
-
     @Override
     public String toString() {
-        return "Airport{" +
-                "Planes=" + planes.toString() +
-                '}';
+        return String.format("Airport{Planes=%s}", planes.toString());
     }
-
-    //Constructor
-    public Airport(List<? extends Plane> planes) {
-        this.planes = planes;
-    }
-
 }

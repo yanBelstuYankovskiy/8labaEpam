@@ -4,9 +4,9 @@ import java.util.Objects;
 
 abstract public class Plane {
     String model;
-    private int maxSpeed;
-    private int maxFlightDistance;
-    private int maxLoadCapacity;
+    private final int maxSpeed;
+    private final int maxFlightDistance;
+    private final int maxLoadCapacity;
 
     public Plane(String model, int maxSpeed, int maxFlightDistance, int maxLoadCapacity) {
         this.model = model;
@@ -19,7 +19,7 @@ abstract public class Plane {
         return model;
     }
 
-    public int getMS() {
+    public int getMaxSpeed() {
         return maxSpeed;
     }
 
@@ -28,25 +28,19 @@ abstract public class Plane {
     }
 
     public int getMinLoadCapacity() {
-        int result = this.maxLoadCapacity;
-        return result;
+        return this.maxLoadCapacity;
     }
 
     @Override
     public String toString() {
-        return "Plane{" +
-                "model='" + model + '\'' +
-                ", maxSpeed=" + maxSpeed +
-                ", maxFlightDistance=" + maxFlightDistance +
-                ", maxLoadCapacity=" + maxLoadCapacity +
-                '}';
+        return String.format("Plane{model='%s', maxSpeed=%d, maxFlightDistance=%d, maxLoadCapacity=%d", model, maxSpeed, maxFlightDistance, maxLoadCapacity);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Plane)) return false;
-        Plane plane = (Plane) o;
+    public boolean equals(Object secondPlane) {
+        if (this == secondPlane) return true;
+        if (!(secondPlane instanceof Plane)) return false;
+        Plane plane = (Plane) secondPlane;
         return maxSpeed == plane.maxSpeed &&
                 maxFlightDistance == plane.maxFlightDistance &&
                 maxLoadCapacity == plane.maxLoadCapacity &&
